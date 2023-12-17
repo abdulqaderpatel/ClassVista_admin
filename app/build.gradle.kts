@@ -66,4 +66,16 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+   var nav_version = "2.7.6"
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    //material
+    implementation("com.google.android.material:material:1.5.0")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha02")
+
+    //icons
+    implementation("androidx.compose.material:material-icons-extended:1.0.0")
+
+    //viewmodel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 }

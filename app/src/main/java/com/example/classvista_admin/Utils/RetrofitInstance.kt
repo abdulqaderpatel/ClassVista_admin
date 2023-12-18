@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
 
-    val api: UserInterface by lazy {
+    val userInterface: UserInterface by lazy {
         Retrofit.Builder().baseUrl(Util.Base).addConverterFactory(GsonConverterFactory.create())
             .build().create(UserInterface::class.java)
     }

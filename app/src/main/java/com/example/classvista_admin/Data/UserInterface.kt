@@ -11,4 +11,6 @@ interface UserInterface{
     suspend fun AdminSignup(@Body admin:Admin): Response<LoginResponse>
 
 
+    @POST("user/login")
+    suspend fun AdminLogin(@Body admin:Admin):Response<LoginResponse>
 }

@@ -31,7 +31,7 @@ class UserStore(context: Context) {
 
     }
 
-    suspend fun getDetails() = pref.data.map {
+    fun getDetails() = pref.data.map {
         Token(token = it[name] ?: "")
     }
 

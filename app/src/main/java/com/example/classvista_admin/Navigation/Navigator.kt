@@ -21,31 +21,42 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Navigator() {
-    val navController= rememberNavController()
-var detail by remember {
-    mutableStateOf("")
-}
-    var preferenceDataStore= UserStore(LocalContext.current)
-    LaunchedEffect(Unit){
-       preferenceDataStore.getDetails().collect{
-          detail=it.token
-           Log.d("checking", detail)
+    val navController = rememberNavController()
+    var detail by remember {
+        mutableStateOf("")
+    }
+    var loading by remember {
+        mutableStateOf(true)
+    }
+
+    var preferenceDataStore = UserStore(LocalContext.current)
+    LaunchedEffect(Unit) {
+        preferenceDataStore.getDetails().collect {
+            detail = it.token
+            Log.d("checking", detail)
+            loading = false
         }
 
+
     }
-    NavHost(navController =navController, startDestination =if(detail!="29|3173RCYvc5VtkCvafORDDID8OH1E4LaC2VSnSHrrc560bc34")"signup" else("home"))
-    {
-        composable("signup")
+    if (!loading) {
+        NavHost(
+            navController = navController,
+            startDestination = if (detail == "") "signup" else ("home")
+        )
         {
-            Signup(navController)
-        }
-        composable("login")
-        {
-            Login(navController)
-        }
-        composable("home")
-        {
-           Home(navController)
+            composable("signup")
+            {
+                Signup(navController)
+            }
+            composable("login")
+            {
+                Login(navController)
+            }
+            composable("home")
+            {
+                Home(navController)
+            }
         }
     }
 }

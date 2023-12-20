@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.ButtonDefaults
@@ -32,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -41,18 +41,22 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.classvista_admin.Components.AuthField
+import com.example.classvista_admin.DataStore.UserStore
 import com.example.classvista_admin.Models.Admin
+import com.example.classvista_admin.Models.Token
 import com.example.classvista_admin.R
 import com.example.classvista_admin.Utils.RetrofitInstance
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+@Preview(showBackground = true)
 @Composable
 fun Login(navController: NavController = rememberNavController()) {
     var loginClicked by remember {
         mutableStateOf(false)
     }
-    var organization by remember {
-        mutableStateOf("")
-    }
+
     var email by remember {
         mutableStateOf("")
     }
@@ -60,24 +64,41 @@ fun Login(navController: NavController = rememberNavController()) {
         mutableStateOf("")
     }
 
+    var context = LocalContext.current
+
     LaunchedEffect(key1 = loginClicked) {
         if (loginClicked) {
 
 
             try {
                 val response =
-                    RetrofitInstance.userInterface.AdminLogin(Admin(email=email,password=password))
+                    RetrofitInstance.userInterface.AdminLogin(
+                        Admin(
+                            email = email,
+                            password = password
+                        )
+                    )
 
                 if (response.isSuccessful) {
-                    Log.d("TAGGG", response.body().toString())
-                    // Handle successful login response (e.g., save token, navigate to next screen)
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        var preferenceDataStore = UserStore(context)
+                        var details = Token(response.body()!!.token)
+                        preferenceDataStore.setValue(details)
+
+                        preferenceDataStore.getDetails().collect {
+                            Log.d("timepass", it.token)
+                        }
+
+                    }
+
                 } else {
 
                 }
             } catch (e: Exception) {
-                // Handle exception (e.g., network error)
+
             } finally {
-                loginClicked = false // Reset the click state after API call completion
+                loginClicked = false
             }
         }
     }
@@ -100,10 +121,11 @@ fun Login(navController: NavController = rememberNavController()) {
                     text = "Don't have an account? ",
                     style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
                 )
-                Text(modifier = Modifier.clickable {
-                    navController.popBackStack()
-                    navController.navigate("signup")
-                },
+                Text(
+                    modifier = Modifier.clickable {
+                        navController.popBackStack()
+                        navController.navigate("signup")
+                    },
                     text = "Get Started",
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = Color.White,
@@ -159,6 +181,7 @@ fun Login(navController: NavController = rememberNavController()) {
                             imeAction = ImeAction.Done
                         )
                     )
+
                     Spacer(modifier = Modifier.height(40.dp))
 
 
@@ -169,8 +192,4 @@ fun Login(navController: NavController = rememberNavController()) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LoginPreview() {
-    Login()
-}
+

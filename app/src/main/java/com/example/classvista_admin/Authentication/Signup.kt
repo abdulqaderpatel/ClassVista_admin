@@ -1,6 +1,5 @@
 package com.example.classvista_admin.Authentication
 
-import android.preference.PreferenceDataStore
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +39,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.classvista_admin.Components.AuthField
@@ -54,11 +51,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
+@Preview(showBackground = true)
 @Composable
 fun Signup(navController: NavController = rememberNavController()) {
-
-
 
 
     var loginClicked by remember {
@@ -74,7 +69,7 @@ fun Signup(navController: NavController = rememberNavController()) {
         mutableStateOf("")
     }
     var context = LocalContext.current
-    var store = UserStore(context)
+
 
     LaunchedEffect(key1 = loginClicked) {
         if (loginClicked) {
@@ -86,16 +81,16 @@ fun Signup(navController: NavController = rememberNavController()) {
 
                 if (response.isSuccessful) {
 
-                 CoroutineScope(Dispatchers.IO).launch {
-                     var preferenceDataStore= UserStore(context)
-                     var details=Token(response.body()!!.token)
-                     preferenceDataStore.setValue(details)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        var preferenceDataStore = UserStore(context)
+                        var details = Token(response.body()!!.token)
+                        preferenceDataStore.setValue(details)
 
-                     preferenceDataStore.getDetails().collect{
-                         Log.d("timepass",it.token)
-                     }
+                        preferenceDataStore.getDetails().collect {
+                            Log.d("timepass", it.token)
+                        }
 
-                 }
+                    }
                 } else {
 
                 }
@@ -190,6 +185,7 @@ fun Signup(navController: NavController = rememberNavController()) {
                             imeAction = ImeAction.Done
                         )
                     )
+
                     Spacer(modifier = Modifier.height(40.dp))
 
 
@@ -200,8 +196,3 @@ fun Signup(navController: NavController = rememberNavController()) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun SignupPreview() {
-    Signup()
-}

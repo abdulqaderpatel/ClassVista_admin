@@ -45,8 +45,10 @@ import com.example.classvista_admin.Components.AuthField
 import com.example.classvista_admin.DataStore.UserStore
 import com.example.classvista_admin.Models.Admin
 import com.example.classvista_admin.Models.Token
+import com.example.classvista_admin.Navigation.Screen
 import com.example.classvista_admin.R
 import com.example.classvista_admin.Utils.RetrofitInstance
+import com.example.classvista_admin.ViewModels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -80,15 +82,17 @@ fun Signup(navController: NavController = rememberNavController()) {
                     RetrofitInstance.userInterface.AdminSignup(Admin(organization, email, password))
 
                 if (response.isSuccessful) {
+                    var userViewModel = UserViewModel()
 
                     CoroutineScope(Dispatchers.IO).launch {
                         var preferenceDataStore = UserStore(context)
-                        var details = Token(response.body()!!.token)
-                        preferenceDataStore.setValue(details)
-
+                        userViewModel.userId.value= Token(response.body()!!.token)
+                        preferenceDataStore.setValue(userViewModel.userId.value)
                         preferenceDataStore.getDetails().collect {
                             Log.d("timepass", it.token)
                         }
+
+                        navController.navigate(Screen.Home.route)
 
                     }
                 } else {

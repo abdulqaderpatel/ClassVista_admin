@@ -1,62 +1,45 @@
 package com.example.classvista_admin.Navigation
 
-import android.util.Log
+
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
+
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.classvista_admin.Authentication.Login
 import com.example.classvista_admin.Authentication.Signup
-import com.example.classvista_admin.DataStore.UserStore
+import com.example.classvista_admin.Main.Course.AddedCourses
 import com.example.classvista_admin.Main.Home
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.classvista_admin.ViewModels.UserViewModel
 
 @Composable
-fun Navigator() {
+fun Navigator(startDestination: String) {
     val navController = rememberNavController()
-    var detail by remember {
-        mutableStateOf("")
-    }
-    var loading by remember {
-        mutableStateOf(true)
-    }
 
-    var preferenceDataStore = UserStore(LocalContext.current)
-    LaunchedEffect(Unit) {
-        preferenceDataStore.getDetails().collect {
-            detail = it.token
-            Log.d("checking", detail)
-            loading = false
-        }
+    var userViewModel=UserViewModel()
 
 
-    }
-    if (!loading) {
-        NavHost(
-            navController = navController,
-            startDestination = if (detail == "") "signup" else ("home")
-        )
+    NavHost(
+        navController = navController,
+        startDestination = startDestination
+    )
+    {
+        composable(Screen.Signup.route)
         {
-            composable("signup")
-            {
-                Signup(navController)
-            }
-            composable("login")
-            {
-                Login(navController)
-            }
-            composable("home")
-            {
-                Home(navController)
-            }
+            Signup(navController)
         }
+        composable(Screen.Login.route)
+        {
+            Login(navController)
+        }
+        composable(Screen.Home.route)
+        {
+            Home(navController)
+        }
+        composable(Screen.AddedCourses.route)
+        {
+            AddedCourses(navController = navController,userViewModel)
+        }
+
     }
 }

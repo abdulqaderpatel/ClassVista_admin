@@ -1,6 +1,7 @@
 package com.example.classvista_admin.Main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.Message
@@ -30,12 +33,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.classvista_admin.Models.AdminCard
+import com.example.classvista_admin.Navigation.Screen
 
 
 @Preview(showBackground = true)
@@ -68,40 +73,46 @@ fun Home(navController: NavController = rememberNavController()) {
 
         var adminCard = listOf<AdminCard>(
             AdminCard(
-                primary = Color(0xff7f00ff),
-                secondary = Color(0xffe100ff),
+                primary = Color(0xff8769FF),
+                secondary = Color(0xfffe60f5),
                 icon = Icons.Filled.Person,
-                label = "Student"
+                label = "Student",
+                route=Screen.AddedCourses.route
             ),
             AdminCard(
                 primary = Color(0xffef4136),
                 secondary = Color(0xfffbb040),
                 icon = Icons.Filled.School,
-                label = "Teacher"
+                label = "Teacher",
+                route = Screen.AddedCourses.route
             ),
             AdminCard(
                 primary = Color(0xffFF0000),
-                secondary =   Color(0xffFF7878),
-                icon =             Icons.Filled.Subject,
-                label = "Subject"
+                secondary = Color(0xffFF7878),
+                icon = Icons.Filled.Subject,
+                label = "Subject",
+                route = Screen.AddedCourses.route
             ),
             AdminCard(
-                primary =     Color(0xfffbb040),
-                secondary =     Color(0xff19ed32),
+                primary = Color(0xfffbb040),
+                secondary = Color(0xff19ed32),
                 icon = Icons.Filled.Newspaper,
-                label = "Course"
+                label = "Course",
+                route = Screen.AddedCourses.route
             ),
             AdminCard(
-                primary =  Color(0xffff7db8),
-                secondary =  Color(0xffee2a7b),
+                primary = Color(0xffff7db8),
+                secondary = Color(0xffee2a7b),
                 icon = Icons.Filled.Message,
-                label = "Notice"
+                label = "Notice",
+                route = Screen.AddedCourses.route
             ),
             AdminCard(
-                primary =        Color(0xffEF484E),
-                secondary =      Color(0xff651347),
+                primary = Color(0xffEF484E),
+                secondary = Color(0xff651347),
                 icon = Icons.Filled.Event,
-                label = "Event"
+                label = "Event",
+                route = Screen.AddedCourses.route
             ),
 
             )
@@ -122,11 +133,13 @@ fun Home(navController: NavController = rememberNavController()) {
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    itemsIndexed(adminCard) { index, admin ->
+                    items(adminCard) { admin ->
                         Box(
                             modifier = Modifier
-                                .height(150.dp)
+                                .height(150.dp).clickable { navController.navigate(admin.route) }
+
                                 .background(
+                                    shape = RoundedCornerShape(15.dp),
                                     brush = Brush.verticalGradient(
                                         colors = listOf(
                                             admin.primary, admin.secondary
@@ -139,7 +152,7 @@ fun Home(navController: NavController = rememberNavController()) {
                                     .fillMaxWidth()
                                     .fillMaxHeight(),
                                 verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
                                 Icon(
                                     modifier = Modifier.size(30.dp),

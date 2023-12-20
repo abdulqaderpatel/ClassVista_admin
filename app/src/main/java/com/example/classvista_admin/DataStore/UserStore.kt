@@ -14,10 +14,11 @@ import kotlinx.coroutines.launch
 
 
 class UserStore(context: Context) {
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore("auth_token")
-    var pref = context.dataStore
 
+    var pref = context.dataStore
     companion object {
+        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("auth_token")
+
         var name = stringPreferencesKey("token")
 
     }

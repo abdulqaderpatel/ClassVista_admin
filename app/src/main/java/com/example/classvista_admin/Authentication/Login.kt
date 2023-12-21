@@ -86,7 +86,7 @@ fun Login(navController: NavController = rememberNavController()) {
                     CoroutineScope(Dispatchers.IO).launch {
                         var userViewModel=UserViewModel()
                         var preferenceDataStore = UserStore(context)
-                        userViewModel.userId.value= Token(response.body()!!.token)
+                        userViewModel.getId(response.body()!!.token)
                         preferenceDataStore.setValue(userViewModel.userId.value)
                         preferenceDataStore.getDetails().collect {
 

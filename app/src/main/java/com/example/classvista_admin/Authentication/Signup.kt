@@ -86,7 +86,7 @@ fun Signup(navController: NavController = rememberNavController()) {
 
                     CoroutineScope(Dispatchers.IO).launch {
                         var preferenceDataStore = UserStore(context)
-                        userViewModel.userId.value= Token(response.body()!!.token)
+                        userViewModel.getId(response.body()!!.token)
                         preferenceDataStore.setValue(userViewModel.userId.value)
                         preferenceDataStore.getDetails().collect {
                             Log.d("timepass", it.token)
@@ -136,7 +136,7 @@ fun Signup(navController: NavController = rememberNavController()) {
                 )
             }
         }
-    }) {
+    }) { it ->
         Box(
             modifier = Modifier
                 .fillMaxSize()

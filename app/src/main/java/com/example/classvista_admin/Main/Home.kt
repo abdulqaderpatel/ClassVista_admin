@@ -1,5 +1,6 @@
 package com.example.classvista_admin.Main
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -41,11 +43,19 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.classvista_admin.Models.AdminCard
 import com.example.classvista_admin.Navigation.Screen
+import com.example.classvista_admin.ViewModels.UserViewModel
 
 
 @Preview(showBackground = true)
 @Composable
 fun Home(navController: NavController = rememberNavController()) {
+
+    LaunchedEffect(Unit) {
+        var userViewModel=UserViewModel()
+
+        Log.d("timepasstime", userViewModel.userId.value.token)
+    }
+
     Scaffold(topBar = {
         Box(
             modifier = Modifier
@@ -136,7 +146,8 @@ fun Home(navController: NavController = rememberNavController()) {
                     items(adminCard) { admin ->
                         Box(
                             modifier = Modifier
-                                .height(150.dp).clickable { navController.navigate(admin.route) }
+                                .height(150.dp)
+                                .clickable { navController.navigate(admin.route) }
 
                                 .background(
                                     shape = RoundedCornerShape(15.dp),

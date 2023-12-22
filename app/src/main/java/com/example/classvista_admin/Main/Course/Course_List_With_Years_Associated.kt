@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.classvista_admin.Models.CourseYear.CourseYearList
 import com.example.classvista_admin.Utils.RetrofitInstance
+import com.example.classvista_admin.ViewModels.CourseViewModel
 import com.example.classvista_admin.ViewModels.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,8 +35,13 @@ import com.example.classvista_admin.ViewModels.UserViewModel
 fun CourseListWithYearsAssociated(
     navController: NavController,
     userViewModel: UserViewModel,
+    courseViewModel: CourseViewModel,
     course_id: Int
 ) {
+
+    var coursename=courseViewModel.courses.value.data.filter {
+        it.id==course_id
+    }
 
     var courseYears by remember { mutableStateOf(CourseYearList(emptyList())) }
     LaunchedEffect(Unit) {
@@ -44,10 +50,9 @@ fun CourseListWithYearsAssociated(
         var token = userViewModel.userId.value.token
 
 
-           courseYears=RetrofitInstance.courseyearInterface.GetCourseWithYearsAssociated(
-                "Bearer $token",
-                course_id
-            ).body()!!
+        courseYears = RetrofitInstance.courseyearInterface.GetCourseWithYearsAssociated(
+            "Bearer $token", course_id
+        ).body()!!
 
 
 
@@ -61,16 +66,14 @@ fun CourseListWithYearsAssociated(
         TopAppBar(
             title = {
                 Text(
-                    text = "Courses",
+                    text = coursename[0].name,
                     style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
                 )
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Blue)
+            }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Blue)
         )
     }) {
         LazyColumn(modifier = Modifier.padding(it)) {
-            items(courseYears.data)
-            { course ->
+            items(courseYears.data) { course ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -79,11 +82,10 @@ fun CourseListWithYearsAssociated(
 
                     ) {
                     Column(
-                        modifier = Modifier
-                            .padding(16.dp)
+                        modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = course.course.name,
+                            text = course.year.year_name,
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.fillMaxWidth()
                         )

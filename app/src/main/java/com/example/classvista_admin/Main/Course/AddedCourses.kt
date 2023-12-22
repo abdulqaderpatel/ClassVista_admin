@@ -8,8 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -61,9 +65,13 @@ fun AddedCourses(
             },
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Blue)
         )
+    }, floatingActionButton = {
+        FloatingActionButton(onClick = { navController.navigate(Screen.AddCourse.route) }) {
+            Icon(imageVector = Icons.Default.Book, contentDescription = "add course")
+        }
     }) {
         LazyColumn(modifier = Modifier.padding(it)) {
-            var i=1
+            var i = 1
             items(courseViewModel.courses.value.data)
             { course ->
                 Card(

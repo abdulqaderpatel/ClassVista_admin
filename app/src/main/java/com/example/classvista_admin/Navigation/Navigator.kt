@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.classvista_admin.Authentication.Login
 import com.example.classvista_admin.Authentication.Signup
 import com.example.classvista_admin.DataStore.UserStore
+import com.example.classvista_admin.Main.Course.AddCourse
 import com.example.classvista_admin.Main.Course.AddedCourses
 import com.example.classvista_admin.Main.Course.CourseListWithYearsAssociated
 import com.example.classvista_admin.Main.Home
@@ -84,11 +85,15 @@ fun Navigator(navController: NavHostController) {
                 if (course_id != null) {
                     CourseListWithYearsAssociated(
                         navController = navController,
-                        userViewModel = userViewModel,
+                        userViewModel = userViewModel,courseViewModel=courseViewModel,
                         course_id = course_id
 
                     )
                 }
+            }
+            composable(Screen.AddCourse.route)
+            {
+                AddCourse(navController = navController)
             }
 
         }

@@ -1,4 +1,4 @@
-package com.example.classvista_admin.Components
+package com.example.classvista_admin.Components.Authentication
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions

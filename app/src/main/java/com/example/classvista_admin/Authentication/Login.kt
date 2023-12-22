@@ -39,7 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.classvista_admin.Components.AuthField
+import com.example.classvista_admin.Components.Authentication.AuthField
 import com.example.classvista_admin.DataStore.UserStore
 import com.example.classvista_admin.Models.Admin.Admin
 import com.example.classvista_admin.Navigation.Screen

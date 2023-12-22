@@ -1,6 +1,7 @@
 package com.example.classvista_admin.Utils
 
 import com.example.classvista_admin.Data.CourseInterface
+import com.example.classvista_admin.Data.CourseYearInterface
 import com.example.classvista_admin.Data.UserInterface
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,6 +17,11 @@ object RetrofitInstance {
     val courseInterface: CourseInterface by lazy {
         Retrofit.Builder().baseUrl(Util.Base).addConverterFactory(GsonConverterFactory.create())
             .build().create(CourseInterface::class.java)
+    }
+
+    val courseyearInterface: CourseYearInterface by lazy {
+        Retrofit.Builder().baseUrl(Util.Base).addConverterFactory(GsonConverterFactory.create())
+            .build().create(CourseYearInterface::class.java)
     }
 
 

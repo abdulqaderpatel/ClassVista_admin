@@ -18,6 +18,7 @@ import com.example.classvista_admin.Authentication.Login
 import com.example.classvista_admin.Authentication.Signup
 import com.example.classvista_admin.DataStore.UserStore
 import com.example.classvista_admin.Main.Course.AddedCourses
+import com.example.classvista_admin.Main.Course.CourseListWithYearsAssociated
 import com.example.classvista_admin.Main.Home
 import com.example.classvista_admin.ViewModels.CourseViewModel
 import com.example.classvista_admin.ViewModels.UserViewModel
@@ -38,7 +39,7 @@ fun Navigator(navController: NavHostController) {
     var details by remember {
         mutableStateOf("")
     }
-    userViewModel.timepass.value="hello"
+    userViewModel.timepass.value = "hello"
     LaunchedEffect(Unit) {
 
         preferenceDataStore.getDetails().collect {
@@ -74,6 +75,20 @@ fun Navigator(navController: NavHostController) {
             composable(Screen.AddedCourses.route)
             {
                 AddedCourses(navController = navController, userViewModel, courseViewModel)
+            }
+
+            composable("${Screen.CourseWithYearsAssociated.route}/{course_id}")
+            { navBackStackEntry ->
+                var course_id = navBackStackEntry.arguments?.getString("course_id")?.toIntOrNull()?:0
+
+                if (course_id != null) {
+                    CourseListWithYearsAssociated(
+                        navController = navController,
+                        userViewModel = userViewModel,
+                        course_id = course_id
+
+                    )
+                }
             }
 
         }

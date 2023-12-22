@@ -1,4 +1,4 @@
-package com.example.classvista_admin.Models
+package com.example.classvista_admin.Models.Admin
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

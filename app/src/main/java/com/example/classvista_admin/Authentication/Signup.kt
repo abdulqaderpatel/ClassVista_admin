@@ -43,8 +43,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.classvista_admin.Components.AuthField
 import com.example.classvista_admin.DataStore.UserStore
-import com.example.classvista_admin.Models.Admin
-import com.example.classvista_admin.Models.Token
+import com.example.classvista_admin.Models.Admin.Admin
 import com.example.classvista_admin.Navigation.Screen
 import com.example.classvista_admin.R
 import com.example.classvista_admin.Utils.RetrofitInstance

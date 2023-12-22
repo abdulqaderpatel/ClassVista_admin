@@ -1,15 +1,11 @@
 package com.example.classvista_admin.ViewModels
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.classvista_admin.Models.Course
-import com.example.classvista_admin.Models.CourseList
+import com.example.classvista_admin.Models.Course.CourseList
 import com.example.classvista_admin.Utils.RetrofitInstance
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -36,7 +32,7 @@ class CourseViewModel : ViewModel() {
 
     }
 
-    fun getCourses():CourseList
+    fun getCourses(): CourseList
     {
         return courses.value
     }

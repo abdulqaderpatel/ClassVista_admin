@@ -1,4 +1,4 @@
-package com.example.classvista_admin.Models
+package com.example.classvista_admin.Models.Admin
 
 data class Admin(
     val organization:String="",

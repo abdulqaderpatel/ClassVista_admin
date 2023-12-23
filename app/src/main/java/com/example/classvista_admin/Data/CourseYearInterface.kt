@@ -10,13 +10,15 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 data class CourseCreationWithYears(
-    val course_id:Int,
-    val year_id:Int,
+    val course_id: Int,
+    val year_id: Int,
 )
 
 data class CourseYearCreationResponse(
-    val data:CourseYear
+    val data: CourseYear
 )
+
+
 interface CourseYearInterface {
 
     //get a course with all its years
@@ -30,8 +32,14 @@ interface CourseYearInterface {
     //create a course with year association
     @POST("courseyear/create")
     suspend fun CreateCourseWithYearsAssociated(
-        @Header(value="Authorization") id:String,
+        @Header(value = "Authorization") id: String,
         @Body courseCreationWithYears: CourseCreationWithYears
-    ):Response<CourseYearCreationResponse>
+    ): Response<CourseYearCreationResponse>
 
+    @GET("courseyear/data/{course_id}/{year_id}")
+    suspend fun getUniqueCourseYear(
+        @Header(value = "Authorization") id: String,
+        @Path("course_id") course_id: Int,
+        @Path("year_id") year_id: Int
+    ): Response<CourseYearCreationResponse>
 }

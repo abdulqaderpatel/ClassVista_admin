@@ -2,7 +2,7 @@ package com.example.classvista_admin.Models.Subject
 
 data class Data(
     val admin_id: Int,
-    val course: Course,
+
     val course_id: Int,
     val created_at: String,
     val id: String,

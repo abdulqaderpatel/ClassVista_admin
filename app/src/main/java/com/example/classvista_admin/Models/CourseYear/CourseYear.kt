@@ -1,7 +1,7 @@
 package com.example.classvista_admin.Models.CourseYear
 
 import com.example.classvista_admin.Models.Course.Course
-
+import com.example.classvista_admin.Models.Year.Year
 
 
 data class CourseYear(
@@ -11,6 +11,6 @@ data class CourseYear(
     val id: Int,
     val updated_at: String,
     val year_id: Int,
-    val course:Course,
-    val year:com.example.classvista_admin.Models.Year.Year
+    val course:Course= Course(),
+    val year:com.example.classvista_admin.Models.Year.Year= Year()
 )

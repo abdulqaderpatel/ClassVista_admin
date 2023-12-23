@@ -6,11 +6,13 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,19 +20,21 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.Title
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,17 +42,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.classvista_admin.Components.Main.AdminButton
 import com.example.classvista_admin.Components.Main.AdminTextField
-import com.example.classvista_admin.Components.Main.LargeDropdownMenu
 import com.example.classvista_admin.Data.CourseCreation
 import com.example.classvista_admin.Data.CourseCreationWithYears
+import com.example.classvista_admin.Data.SubjectInterface
 import com.example.classvista_admin.Utils.RetrofitInstance
 import com.example.classvista_admin.ViewModels.CourseViewModel
 import com.example.classvista_admin.ViewModels.UserViewModel
@@ -70,11 +74,15 @@ fun AddSubject(
         mutableStateOf("")
     }
 
-    var courseId by remember {
+    var subjectId by remember {
         mutableStateOf("")
     }
 
-    var years = listOf(1, 2, 3)
+    var selectedYear by remember {
+        mutableStateOf("FY")
+    }
+    var years = listOf("FY", "SY", "TY")
+    var yearIndex = 1;
 
     var buttonLoading by remember {
         mutableStateOf(false)
@@ -94,9 +102,9 @@ fun AddSubject(
                 RetrofitInstance.courseInterface.GetAllCourses("Bearer $token").body()!!.data
             )
 
-            dataLoading = false
 
         }
+        dataLoading = false
     }
 
 
@@ -110,48 +118,56 @@ fun AddSubject(
     var selectedIndex by remember { mutableStateOf(0) }
 
 
-    if (!dataLoading)
-        Scaffold(topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Add Subject",
-                        style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
-                    )
-                }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Blue)
-            )
-        }, bottomBar = {
-            val context = LocalContext.current
-            AdminButton(label = "Add Subject", buttonLoading) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    buttonLoading = true
-                    var response = RetrofitInstance.courseInterface.CreateCourse(
+
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    text = "Add Subject",
+                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
+                )
+            }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Blue)
+        )
+    }, bottomBar = {
+        val context = LocalContext.current
+        AdminButton(label = "Add Subject", buttonLoading) {
+            CoroutineScope(Dispatchers.IO).launch {
+                buttonLoading = true
+                val courseYear = RetrofitInstance.courseyearInterface.getUniqueCourseYear(
+                    "Bearer ${userViewModel.userId.value.token}",
+                    courseViewModel.courses[selectedIndex].id,
+                    yearIndex
+                )
+                Log.d("Course year", courseYear.body().toString())
+                if(courseYear.isSuccessful) {
+                    var response = RetrofitInstance.subjectInterface.CreateSubject(
                         "Bearer ${userViewModel.userId.value.token}",
-                        CourseCreation(name = title, short_form = courseId)
-                    )
-                    var courseId = response.body()!!.data.id
-
-                    courseViewModel.courses.add(response.body()!!.data)
-                    Log.d("TAGGGG", response.body().toString())
-
-                    for (element in years) {
-                        RetrofitInstance.courseyearInterface.CreateCourseWithYearsAssociated(
-                            "Bearer ${userViewModel.userId.value.token}",
-                            CourseCreationWithYears(courseId, element)
+                        SubjectInterface.Subject(
+                            subjectId,
+                            courseYear.body()!!.data.id,
+                            title
                         )
-
-                    }
-                    Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(context, "Course Added Successfully", Toast.LENGTH_LONG)
-                            .show()
-                    }
-
-                    buttonLoading = false
-
+                    )
                 }
 
+
+
+
+
+
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(context, "Subject Added Successfully", Toast.LENGTH_LONG)
+                        .show()
+                }
+
+                buttonLoading = false
+
             }
-        }) { it ->
+
+        }
+    }) { it ->
+        if (!dataLoading) {
+
             Box(
                 modifier = Modifier
                     .padding(it)
@@ -173,34 +189,41 @@ fun AddSubject(
                     Spacer(modifier = Modifier.height(15.dp))
                     AdminTextField(
                         leadingIcon = Icons.Default.RadioButtonChecked,
-                        value = courseId,
-                        valueChange = { courseId = it },
-                        hint = "Course Id",
+                        value = subjectId,
+                        valueChange = { subjectId = it },
+                        hint = "Subject Id",
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                     )
-                    Column {
-                        Text(
-                            "Selected: ${courses[selectedIndex]}",
-                            modifier = Modifier.padding(16.dp)
-                        )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        modifier = Modifier.padding(start = 5.dp),
 
-                        // Dropdown menu
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .background(Color(0xffE7E0EC))
+                        text = "Course",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.W500)
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+
+                            .background(Color(0xffE7E0EC))
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            // IconButton that toggles the dropdown menu
-                            IconButton(onClick = { expanded = true }) {
-                                Text("Open Dropdown")
-                            }
+                            Text(
+                                "Selected: ${courses[selectedIndex]}",
+                                modifier = Modifier.padding(16.dp),
+                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                            )
 
-                            // DropdownMenu displays a list of DropdownMenuItem
                             DropdownMenu(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .background(Color(0xffE7E0EC)),
+
                                 expanded = expanded,
                                 onDismissRequest = { expanded = false },
                             ) {
@@ -215,13 +238,60 @@ fun AddSubject(
                                     )
                                 }
                             }
+                            TextButton(onClick = { expanded = true }) {
+                                Text(text = "Select Course")
+                            }
+
+
                         }
                     }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        modifier = Modifier.padding(start = 5.dp),
 
+                        text = "Year",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.W500)
+                    )
+                    Spacer(modifier = Modifier.height(3.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        years.mapIndexed { index, year ->
+                            ElevatedButton(
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .height(38.dp),
+                                onClick = {
+                                    selectedYear = year
+                                    yearIndex = index + 1
+                                },
+                                shape = RectangleShape,
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (selectedYear == year) Color(
+                                        0xff24282D
+                                    ) else (Color(0xffE1E7EF))
+                                )
+                            ) {
 
+                                Text(
+                                    text = year,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = if (selectedYear == year) Color.White else (Color.Black)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
+        else{
+            Box(modifier = Modifier.fillMaxSize())
+            {
+                CircularProgressIndicator()
+            }
+        }
+    }
 }
 
 

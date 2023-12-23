@@ -1,5 +1,5 @@
 package com.example.classvista_admin.Models.Subject
 
 data class SubjectResponse(
-    val `data`: List<Data>
+    val data: Data
 )

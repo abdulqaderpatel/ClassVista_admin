@@ -98,7 +98,7 @@ fun Home(navController: NavController = rememberNavController()) {
                 secondary = Color(0xffFF7878),
                 icon = Icons.Filled.Subject,
                 label = "Subject",
-                route = Screen.AddedCourses.route
+                route = Screen.SubjectList.route
             ),
             AdminCard(
                 primary = Color(0xfffbb040),

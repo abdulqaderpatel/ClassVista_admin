@@ -9,15 +9,6 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 
-data class CourseCreation(
-    val name: String,
-    val short_form: String
-)
-
-data class CourseCreationResponse(
-    val data: Course
-)
-
 
 interface CourseInterface {
 
@@ -31,3 +22,13 @@ interface CourseInterface {
     ): Response<CourseCreationResponse>
 
 }
+
+
+data class CourseCreation(
+    val name: String,
+    val short_form: String
+)
+
+data class CourseCreationResponse(
+    val data: Course
+)

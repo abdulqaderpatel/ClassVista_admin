@@ -21,6 +21,8 @@ import com.example.classvista_admin.Main.Course.AddCourse
 import com.example.classvista_admin.Main.Course.AddedCourses
 import com.example.classvista_admin.Main.Course.CourseListWithYearsAssociated
 import com.example.classvista_admin.Main.Home
+import com.example.classvista_admin.Main.Subject.AddSubject
+import com.example.classvista_admin.Main.Subject.SubjectsList
 import com.example.classvista_admin.ViewModels.CourseViewModel
 import com.example.classvista_admin.ViewModels.UserViewModel
 
@@ -80,12 +82,13 @@ fun Navigator(navController: NavHostController) {
 
             composable("${Screen.CourseWithYearsAssociated.route}/{course_id}")
             { navBackStackEntry ->
-                var course_id = navBackStackEntry.arguments?.getString("course_id")?.toIntOrNull()?:0
+                var course_id =
+                    navBackStackEntry.arguments?.getString("course_id")?.toIntOrNull() ?: 0
 
                 if (course_id != null) {
                     CourseListWithYearsAssociated(
                         navController = navController,
-                        userViewModel = userViewModel,courseViewModel=courseViewModel,
+                        userViewModel = userViewModel, courseViewModel = courseViewModel,
                         course_id = course_id
 
                     )
@@ -93,7 +96,27 @@ fun Navigator(navController: NavHostController) {
             }
             composable(Screen.AddCourse.route)
             {
-                AddCourse(navController = navController,userViewModel=userViewModel, courseViewModel = courseViewModel)
+                AddCourse(
+                    navController = navController,
+                    userViewModel = userViewModel,
+                    courseViewModel = courseViewModel
+                )
+            }
+            composable(Screen.SubjectList.route)
+            {
+                SubjectsList(
+                    navController = navController,
+                    userViewModel = userViewModel,
+                    courseViewModel = courseViewModel
+                )
+            }
+            composable(Screen.AddSubject.route)
+            {
+                AddSubject(
+                    navController = navController,
+                    userViewModel = userViewModel,
+                    courseViewModel = courseViewModel
+                )
             }
 
         }

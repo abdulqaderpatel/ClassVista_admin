@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -46,12 +47,16 @@ fun AddedCourses(
 ) {
 
     var isLoading = true
-    LaunchedEffect(Unit) {
 
-        var token = userViewModel.userId.value.token
-        courseViewModel.courses.value =
-            RetrofitInstance.courseInterface.GetAllCourses("Bearer $token").body()!!
-        isLoading = false
+        LaunchedEffect(Unit) {
+            if (courseViewModel.coursesLoaded.value == false) {
+                courseViewModel.coursesLoaded.value = true
+                var token = userViewModel.userId.value.token
+                courseViewModel.courses.addAll(
+                    RetrofitInstance.courseInterface.GetAllCourses("Bearer $token").body()!!.data
+                )
+                isLoading = false
+            }
     }
 
 
@@ -67,12 +72,12 @@ fun AddedCourses(
         )
     }, floatingActionButton = {
         FloatingActionButton(onClick = { navController.navigate(Screen.AddCourse.route) }) {
-            Icon(imageVector = Icons.Default.Book, contentDescription = "add course")
+            Icon(imageVector = Icons.Default.Newspaper, contentDescription = "add course")
         }
     }) {
         LazyColumn(modifier = Modifier.padding(it)) {
             var i = 1
-            items(courseViewModel.courses.value.data)
+            items(courseViewModel.courses)
             { course ->
                 Card(
                     modifier = Modifier

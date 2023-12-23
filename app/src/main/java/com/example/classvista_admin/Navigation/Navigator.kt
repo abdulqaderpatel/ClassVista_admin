@@ -93,7 +93,7 @@ fun Navigator(navController: NavHostController) {
             }
             composable(Screen.AddCourse.route)
             {
-                AddCourse(navController = navController)
+                AddCourse(navController = navController,userViewModel=userViewModel, courseViewModel = courseViewModel)
             }
 
         }

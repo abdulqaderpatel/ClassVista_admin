@@ -39,7 +39,7 @@ fun CourseListWithYearsAssociated(
     course_id: Int
 ) {
 
-    var coursename=courseViewModel.courses.value.data.filter {
+    var coursename=courseViewModel.courses.filter {
         it.id==course_id
     }
 

@@ -2,6 +2,7 @@ package com.example.classvista_admin.Data
 
 import com.example.classvista_admin.Models.CourseYear.CourseYear
 import com.example.classvista_admin.Models.CourseYear.CourseYearList
+import com.example.classvista_admin.Models.CourseYear.SubjectCourse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,6 +19,9 @@ data class CourseYearCreationResponse(
     val data: CourseYear
 )
 
+data class SubjectCourses(
+    val course_ids:List<Int>
+)
 
 interface CourseYearInterface {
 
@@ -42,4 +46,9 @@ interface CourseYearInterface {
         @Path("course_id") course_id: Int,
         @Path("year_id") year_id: Int
     ): Response<CourseYearCreationResponse>
+
+    @POST("courseyear/data/subjects")
+    suspend fun getCourseSubjects(
+        @Body courseids: SubjectCourses
+    ): Response<SubjectCourse>
 }

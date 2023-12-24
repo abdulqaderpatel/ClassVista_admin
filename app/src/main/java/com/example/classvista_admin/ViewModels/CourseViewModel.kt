@@ -14,10 +14,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CourseViewModel : ViewModel() {
+
+    //stores the course details
     var courses = mutableStateListOf<Course>()
     var coursesLoaded=mutableStateOf(false)
     var coursesLoading = false;
 
+    //stores the subject details in relation to a course
     var subjectCourses = mutableStateListOf<List<Data>>()
 
 

@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.classvista_admin.Components.Subject.CourseSubjectDetails
 import com.example.classvista_admin.Data.CourseYearInterface
 import com.example.classvista_admin.Data.SubjectCourses
 import com.example.classvista_admin.Models.Course.Course
@@ -123,7 +124,7 @@ fun SubjectsList(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     itemsIndexed(courseViewModel.subjectCourses) { index, course ->
-                        CourseCard(
+                        CourseSubjectDetails(
                             index = 0,
                             subjectCourse = course,
                             course = courseViewModel.courses[index]
@@ -134,53 +135,5 @@ fun SubjectsList(
             }
 
 
-    }
-}
-
-@Composable
-fun CourseCard(index: Int, subjectCourse: List<Data>, course: Course) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Course Name as heading
-            Text(
-                text = "${course.name} (${course.short_form})",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-
-            // Subjects listed underneath each course
-            subjectCourse.map {
-                Row(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
-                    Box(modifier = Modifier.defaultMinSize(minWidth = 100.dp)) {
-                        Text(
-                            text = it.id,
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp,
-                            modifier = Modifier.padding(bottom = 4.dp, end = 4.dp)
-                        )
-                    }
-                    Text(
-                        fontWeight = FontWeight.SemiBold,
-                        text = it.subject_name,
-                        fontSize = 16.sp,
-                        color = Color.Blue,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                }
-            }
-
-
-        }
     }
 }

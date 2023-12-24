@@ -23,7 +23,10 @@ import com.example.classvista_admin.Main.Course.CourseListWithYearsAssociated
 import com.example.classvista_admin.Main.Home
 import com.example.classvista_admin.Main.Subject.AddSubject
 import com.example.classvista_admin.Main.Subject.SubjectsList
+import com.example.classvista_admin.Main.Teacher.AddTeacher
+import com.example.classvista_admin.Main.Teacher.TeacherList
 import com.example.classvista_admin.ViewModels.CourseViewModel
+import com.example.classvista_admin.ViewModels.TeacherViewModel
 import com.example.classvista_admin.ViewModels.UserViewModel
 
 @Composable
@@ -31,6 +34,7 @@ fun Navigator(navController: NavHostController) {
 
     var userViewModel = UserViewModel()
     var courseViewModel = CourseViewModel()
+    var teacherViewModel=TeacherViewModel()
 
 
     var isLoading by remember {
@@ -118,7 +122,14 @@ fun Navigator(navController: NavHostController) {
                     courseViewModel = courseViewModel
                 )
             }
-
+            composable(Screen.TeacherList.route)
+            {
+                TeacherList(navController = navController, userViewModel = userViewModel,teacherViewModel=teacherViewModel)
+            }
+            composable(Screen.AddTeacher.route)
+            {
+                AddTeacher(navController = navController, userViewModel = userViewModel,teacherViewModel=teacherViewModel)
+            }
         }
     }
 }

@@ -1,14 +1,22 @@
 package com.example.classvista_admin.Main.Subject
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.filled.Subject
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -20,8 +28,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +43,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.classvista_admin.Data.CourseYearInterface
 import com.example.classvista_admin.Data.SubjectCourses
+import com.example.classvista_admin.Models.Course.Course
+import com.example.classvista_admin.Models.CourseYear.Data
+import com.example.classvista_admin.Models.CourseYear.SubjectCourse
 import com.example.classvista_admin.Navigation.Screen
 import com.example.classvista_admin.Utils.RetrofitInstance
 import com.example.classvista_admin.ViewModels.CourseViewModel
@@ -44,7 +59,12 @@ fun SubjectsList(
 
     var courses = mutableListOf<Int>()
 
+
+    var isDataLoading by remember {
+        mutableStateOf(true)
+    }
     LaunchedEffect(Unit) {
+
         if (!courseViewModel.coursesLoaded.value) {
             courseViewModel.coursesLoaded.value = true
             var token = userViewModel.userId.value.token
@@ -55,18 +75,25 @@ fun SubjectsList(
 
         }
         courseViewModel.courses.map {
-            if (it.id != 2) {
-                courses.add(it.id)
-            }
+
+            courses.add(it.id)
+
 
         }
-        Log.d("timepass", courses.toString())
 
-
-        Log.d("subjects", RetrofitInstance.courseyearInterface.getCourseSubjects(
-           SubjectCourses(courses)
-        ).body().toString()
+        courseViewModel.subjectCourses.addAll(
+            RetrofitInstance.courseyearInterface.getCourseSubjects(
+                SubjectCourses(courses)
+            ).body()!!.data
         )
+
+
+
+
+        Log.d("coursing time", courseViewModel.subjectCourses[0][0].id.toString())
+
+        isDataLoading = false
+
     }
 
     Scaffold(topBar = {
@@ -80,44 +107,79 @@ fun SubjectsList(
         )
     }, floatingActionButton = {
         FloatingActionButton(onClick = { navController.navigate(Screen.AddSubject.route) }) {
-            Icon(imageVector = Icons.Default.Subject, contentDescription = "add course")
+            Icon(imageVector = Icons.Default.Subject, contentDescription = "add subject")
         }
     }) {
-        Box(modifier = Modifier.padding(it)) {
+        if (!isDataLoading)
+            Box(
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize()
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    itemsIndexed(courseViewModel.subjectCourses) { index, course ->
+                        CourseCard(
+                            index = 0,
+                            subjectCourse = course,
+                            course = courseViewModel.courses[index]
+                        )
+                    }
+                }
 
-        }
+            }
+
+
     }
 }
 
-
-
-@Preview(showBackground = true)
 @Composable
-fun CourseCard() {
+fun CourseCard(index: Int, subjectCourse: List<Data>, course: Course) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Course Name as heading
             Text(
-                text = "softwaring time",
+                text = "${course.name} (${course.short_form})",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
             // Subjects listed underneath each course
+            subjectCourse.map {
+                Row(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
+                    Box(modifier = Modifier.defaultMinSize(minWidth = 100.dp)) {
+                        Text(
+                            text = it.id,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(bottom = 4.dp, end = 4.dp)
+                        )
+                    }
+                    Text(
+                        fontWeight = FontWeight.SemiBold,
+                        text = it.subject_name,
+                        fontSize = 16.sp,
+                        color = Color.Blue,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                }
+            }
 
-                Text(
-                    text = "Subject ID: dsflksdj - ${"Web programming"}",
-                    fontSize = 16.sp,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
 
         }
     }

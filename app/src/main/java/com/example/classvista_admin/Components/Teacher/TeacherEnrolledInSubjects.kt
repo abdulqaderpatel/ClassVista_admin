@@ -1,8 +1,10 @@
 package com.example.classvista_admin.Components.Teacher
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -17,16 +19,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.classvista_admin.Models.Course.Course
-import com.example.classvista_admin.Models.CourseYear.Data
+import com.example.classvista_admin.Models.Teacher.Data
+import com.example.classvista_admin.Models.Teacher.TeacherSubject
+
 
 @Preview(showBackground = true)
 @Composable
 fun TeacherEnrolledInSubjects(
-    isSelected: Boolean=false,onCheckedChange:(Boolean)->Unit={},
-    index: Int = 0, subjectCourse: List<Data> = listOf(
-        Data(subject_name = "web programming", id = "SBIT404"),
-        Data(subject_name = "web programming", id = "SBIT404"),
-    ), course: Course = Course(name = "Bachelors in Information Technology", short_form = "BSCIT")
+
+    index: Int = 0,
+    teacherSubjects: Data =Data(id = "SBIT393", name = "Shruti Shah", subjects = listOf(
+        TeacherSubject(id = "SBIT304", subject_name = "Computer organization"),
+        TeacherSubject(id = "SBIT305", subject_name = "Mobile Application Development")
+    )),
+
 ) {
     Card(
         modifier = Modifier
@@ -42,27 +48,31 @@ fun TeacherEnrolledInSubjects(
         ) {
             // Course Name as heading
             Text(
-                text = "${course.name} (${course.short_form})",
+                text = teacherSubjects.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
             // Subjects listed underneath each course
-            subjectCourse.map {
+            teacherSubjects.subjects.map {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
+                        .padding(bottom = 10.dp), horizontalArrangement = Arrangement.SpaceBetween,
+                    
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Checkbox(checked = isSelected, onCheckedChange =onCheckedChange )
 
-                    Text(
-                        text = it.id,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(bottom = 4.dp, end = 4.dp)
-                    )
+
+                    Box(modifier=Modifier.defaultMinSize(minWidth = 100.dp)) {
+                        Text(
+                            text = it.id,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(bottom = 4.dp, end = 4.dp)
+                        )
+                    }
 
                     Text(
                         fontWeight = FontWeight.SemiBold,

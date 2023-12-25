@@ -20,6 +20,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,13 +30,15 @@ fun AdminTextField(
     leadingIcon: ImageVector,
     value: String,
     valueChange: (String) -> Unit,
+    isPassword: Boolean = false,
     hint: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         keyboardType = KeyboardType.Text,
         imeAction = ImeAction.Next
     ),
 ) {
-    Text(modifier = Modifier.padding(start = 5.dp),
+    Text(
+        modifier = Modifier.padding(start = 5.dp),
 
         text = hint,
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.W500)
@@ -53,10 +57,16 @@ fun AdminTextField(
                 color = Color.Gray,
                 style = MaterialTheme.typography.bodyMedium
             )
-        }, leadingIcon = {
+        },
+
+        visualTransformation = if (!isPassword) VisualTransformation.None else (PasswordVisualTransformation()),
+
+
+        leadingIcon = {
             Icon(imageVector = leadingIcon, contentDescription = "textfield icon")
         },
         keyboardOptions = keyboardOptions,
+
         colors = TextFieldDefaults.textFieldColors(
 
             cursorColor = Color.Blue,

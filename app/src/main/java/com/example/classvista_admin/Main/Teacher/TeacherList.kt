@@ -32,24 +32,24 @@ fun TeacherList(
 ) {
 
     LaunchedEffect(Unit) {
+        if (!teacherViewModel.isTeacherDataLoaded.value) {
+            teacherViewModel.isTeacherDataLoaded.value=true
+            teacherViewModel.teacherIds.addAll(
+                RetrofitInstance.teacherInterface.getAllTeacherIds("Bearer ${userViewModel.userId.value.token}")
+                    .body()!!.data
+            )
 
+            teacherViewModel.teacherSubjects.addAll(
+                RetrofitInstance.teacherInterface.getAllTeacherSubjects(
+                    "Bearer ${userViewModel.userId.value.token}",
+                    TeacherInterface.TeacherIds(teacherViewModel.teacherIds)
+                ).body()!!.data
+            )
+        }
 
-        teacherViewModel.teacherIds.addAll(
-            RetrofitInstance.teacherInterface.getAllTeacherIds("Bearer ${userViewModel.userId.value.token}")
-                .body()!!.data
-        )
-
-        teacherViewModel.teacherSubjects.addAll(
-            RetrofitInstance.teacherInterface.getAllTeacherSubjects(
-                "Bearer ${userViewModel.userId.value.token}",
-                TeacherInterface.TeacherIds(teacherViewModel.teacherIds)
-            ).body()!!.data
-        )
-
-        Log.d("teachers lis", teacherViewModel.teacherSubjects[1].id)
     }
 
-    Scaffold(topBar = { PrimaryAppBar(title = "Teachers")},floatingActionButton = {
+    Scaffold(topBar = { PrimaryAppBar(title = "Teachers") }, floatingActionButton = {
         NavigatingFloatingActionButton(
             navController = navController,
             route = Screen.AddTeacher.route,
@@ -57,14 +57,15 @@ fun TeacherList(
             description = "Teacher"
         )
     }) {
-        Box(modifier = Modifier
-            .padding(it)
-            .fillMaxSize())
+        Box(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+        )
         {
-            LazyColumn(modifier=Modifier.fillMaxWidth()) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 itemsIndexed(teacherViewModel.teacherSubjects)
-                {
-                    index,teacher->
+                { index, teacher ->
                     TeacherEnrolledInSubjects(teacherSubjects = teacher)
                 }
 

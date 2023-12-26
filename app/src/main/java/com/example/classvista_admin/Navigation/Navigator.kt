@@ -181,7 +181,11 @@ fun Navigator(navController: NavHostController) {
 
             composable(Screen.AddStudent.route)
             {
-                AddStudent(navController = navController, userViewModel = userViewModel)
+                AddStudent(
+                    navController = navController,
+                    userViewModel = userViewModel,
+                    courseViewModel = courseViewModel
+                )
             }
             composable(Screen.NoticeList.route)
             {

@@ -35,7 +35,7 @@ fun StudentsCourseList(
         mutableStateOf(false)
     }
     LaunchedEffect(Unit) {
-        isLoading=true;
+        isLoading = true;
         if (!courseViewModel.coursesLoaded.value) {
             courseViewModel.coursesLoaded.value = true
             var token = userViewModel.userId.value.token
@@ -44,28 +44,28 @@ fun StudentsCourseList(
             )
 
         }
-        isLoading=false
+        isLoading = false
     }
 
-    if(!isLoading)
-    Scaffold(topBar = { PrimaryAppBar(title = "Student Courses") }, floatingActionButton = {
-        NavigatingFloatingActionButton(
-            navController = navController,
-            route = Screen.AddStudent.route,
-            icon = Icons.Default.Person,
-            description = "Add Student"
-        )
-    }) {
-        Box(modifier = Modifier.padding(it))
-        {
-            LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                items(courseViewModel.courses)
-                { course ->
-                    CourseCard(
-                        course = Course(short_form = course.short_form, id = course.id),
-                        onClick ={navController.navigate("${Screen.StudentsYearCourse.route}/${course.id}")} )
+    if (!isLoading)
+        Scaffold(topBar = { PrimaryAppBar(title = "Student Courses") }, floatingActionButton = {
+            NavigatingFloatingActionButton(
+                navController = navController,
+                route = Screen.AddStudent.route,
+                icon = Icons.Default.Person,
+                description = "Add Student"
+            )
+        }) {
+            Box(modifier = Modifier.padding(it))
+            {
+                LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+                    items(courseViewModel.courses)
+                    { course ->
+                        CourseCard(
+                            course = Course(short_form = course.short_form, id = course.id),
+                            onClick = { navController.navigate("${Screen.StudentsYearCourse.route}/${course.id}") })
+                    }
                 }
             }
         }
-    }
 }

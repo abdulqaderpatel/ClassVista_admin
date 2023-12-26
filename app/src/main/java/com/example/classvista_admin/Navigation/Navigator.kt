@@ -21,6 +21,12 @@ import com.example.classvista_admin.Main.Course.AddCourse
 import com.example.classvista_admin.Main.Course.AddedCourses
 import com.example.classvista_admin.Main.Course.CourseListWithYearsAssociated
 import com.example.classvista_admin.Main.Home
+import com.example.classvista_admin.Main.Notice.AddNotice
+import com.example.classvista_admin.Main.Notice.NoticeList
+import com.example.classvista_admin.Main.Student.AddStudent
+
+import com.example.classvista_admin.Main.Student.StudentsCourseList
+import com.example.classvista_admin.Main.Student.StudentsInCourse
 import com.example.classvista_admin.Main.Subject.AddSubject
 import com.example.classvista_admin.Main.Subject.SubjectsList
 import com.example.classvista_admin.Main.Teacher.AddTeacher
@@ -34,7 +40,7 @@ fun Navigator(navController: NavHostController) {
 
     var userViewModel = UserViewModel()
     var courseViewModel = CourseViewModel()
-    var teacherViewModel=TeacherViewModel()
+    var teacherViewModel = TeacherViewModel()
 
 
     var isLoading by remember {
@@ -124,11 +130,47 @@ fun Navigator(navController: NavHostController) {
             }
             composable(Screen.TeacherList.route)
             {
-                TeacherList(navController = navController, userViewModel = userViewModel,teacherViewModel=teacherViewModel)
+                TeacherList(
+                    navController = navController,
+                    userViewModel = userViewModel,
+                    teacherViewModel = teacherViewModel
+                )
             }
             composable(Screen.AddTeacher.route)
             {
-                AddTeacher(navController = navController, userViewModel = userViewModel,teacherViewModel=teacherViewModel)
+                AddTeacher(
+                    navController = navController,
+                    userViewModel = userViewModel,
+                    teacherViewModel = teacherViewModel
+                )
+            }
+            composable(Screen.StudentCourseList.route)
+            {
+                StudentsCourseList(
+                    navController = navController,
+                    userViewModel = userViewModel,
+                    courseViewModel
+                )
+            }
+            composable(Screen.StudentsInCourse.route)
+            {
+                StudentsInCourse(navController = navController, userViewModel = userViewModel)
+            }
+            composable(Screen.StudentsYearCourse.route)
+            {
+
+            }
+            composable(Screen.AddStudent.route)
+            {
+                AddStudent(navController = navController, userViewModel = userViewModel)
+            }
+            composable(Screen.NoticeList.route)
+            {
+                NoticeList(navController = navController, userViewModel = userViewModel)
+            }
+            composable(Screen.AddNotice.route)
+            {
+                AddNotice(navController = navController, userViewModel = userViewModel)
             }
         }
     }

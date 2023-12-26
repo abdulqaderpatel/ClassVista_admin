@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,7 +44,8 @@ fun CourseCard(
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth().fillMaxHeight(),
+                .fillMaxWidth()
+                .fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -65,23 +67,23 @@ fun CourseCard(
 @Preview(showBackground = true)
 @Composable
 fun YearCard(
-    year: String="First Year",
+    year: String = "First Year",
     onClick: () -> Unit = {},
     cardColor: Color = Color.Blue
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(160.dp)
-            .padding(8.dp)
+            .height(200.dp)
+            .padding(start =8.dp, top = 8.dp, end = 8.dp, bottom = 30.dp)
             .fillMaxWidth()
-            .clickable { onClick() }
-            , colors = CardDefaults.cardColors(containerColor = cardColor)
+            .clickable { onClick() }, colors = CardDefaults.cardColors(containerColor = cardColor)
     ) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth().fillMaxHeight(),
+                .fillMaxWidth()
+                .fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {

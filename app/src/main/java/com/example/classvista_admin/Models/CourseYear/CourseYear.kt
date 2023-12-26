@@ -5,12 +5,12 @@ import com.example.classvista_admin.Models.Year.Year
 
 
 data class CourseYear(
-    val admin_id: Int,
-    val course_id: Int,
-    val created_at: String,
-    val id: Int,
-    val updated_at: String,
-    val year_id: Int,
+    val admin_id: Int=0,
+    val course_id: Int=0,
+    val created_at: String="",
+    val id: Int=0,
+    val updated_at: String="",
+    val year_id: Int=0,
     val course:Course= Course(),
     val year:com.example.classvista_admin.Models.Year.Year= Year()
 )

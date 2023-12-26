@@ -51,7 +51,9 @@ fun StudentsCourseList(
             LazyVerticalGrid(columns = GridCells.Fixed(2)) {
                 items(courseViewModel.courses)
                 { course ->
-                    CourseCard(course = Course(short_form = course.short_form, id = course.id))
+                    CourseCard(
+                        course = Course(short_form = course.short_form, id = course.id),
+                        onClick = { navController.navigate("${Screen.StudentsYearCourse.route}/${course.id}") })
                 }
             }
         }

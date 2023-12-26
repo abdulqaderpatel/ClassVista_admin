@@ -20,7 +20,20 @@ data class CourseYearCreationResponse(
 )
 
 data class SubjectCourses(
-    val course_ids:List<Int>
+    val course_ids: List<Int>
+)
+
+data class Student(
+    val id: String,
+    val admin_id: Int,
+    val course_id: Int,
+    val name: String,
+    val created_at: String,
+    val updated_at: String
+)
+
+data class StudentsForCourse(
+    val data: List<Student>
 )
 
 interface CourseYearInterface {
@@ -51,4 +64,9 @@ interface CourseYearInterface {
     suspend fun getCourseSubjects(
         @Body courseids: SubjectCourses
     ): Response<SubjectCourse>
+
+
+    //get students details for single course
+    @GET("courseyear/data/students/{courseId}")
+    suspend fun studentDetailsForSingleCourse(@Path("courseId") courseId: Int): Response<StudentsForCourse>
 }

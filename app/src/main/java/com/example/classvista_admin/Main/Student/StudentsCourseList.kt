@@ -10,6 +10,10 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.classvista_admin.Components.Main.NavigatingFloatingActionButton
@@ -27,7 +31,11 @@ fun StudentsCourseList(
     userViewModel: UserViewModel,
     courseViewModel: CourseViewModel
 ) {
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
     LaunchedEffect(Unit) {
+        isLoading=true;
         if (!courseViewModel.coursesLoaded.value) {
             courseViewModel.coursesLoaded.value = true
             var token = userViewModel.userId.value.token
@@ -36,8 +44,10 @@ fun StudentsCourseList(
             )
 
         }
+        isLoading=false
     }
 
+    if(!isLoading)
     Scaffold(topBar = { PrimaryAppBar(title = "Student Courses") }, floatingActionButton = {
         NavigatingFloatingActionButton(
             navController = navController,
@@ -53,10 +63,9 @@ fun StudentsCourseList(
                 { course ->
                     CourseCard(
                         course = Course(short_form = course.short_form, id = course.id),
-                        onClick = { navController.navigate("${Screen.StudentsYearCourse.route}/${course.id}") })
+                        onClick ={navController.navigate("${Screen.StudentsYearCourse.route}/${course.id}")} )
                 }
             }
         }
     }
 }
-

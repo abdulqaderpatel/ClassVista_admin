@@ -1,13 +1,9 @@
 package com.example.classvista_admin.Components.Student
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,58 +20,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.classvista_admin.Models.Course.Course
-import com.example.classvista_admin.Models.CourseYear.Data
+import com.example.classvista_admin.Data.Student
 
 @Preview(showBackground = true)
 @Composable
-fun CourseCard(
-    course: Course = Course(short_form = "BSCIT", id = 1),
-    onClick: () -> Unit = {}
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(160.dp)
-            .padding(8.dp)
-            .fillMaxWidth()
-
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .fillMaxHeight()  .clickable { onClick() },
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            // Course Name as heading
-            Text(
-                text = course.short_form,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(bottom = 8.dp),
-                style = MaterialTheme.typography.displayMedium
-            )
-
-
-        }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun YearCard(
-    year: String = "First Year",
+fun StudentCard(
+    student: Student = Student(
+        id = "SBIT4023",
+        name = "Abdul Qader Patel",
+        admin_id = 2,
+        course_id = 2,
+        created_at = "dfd",
+        updated_at = "dfds"
+    ),
     onClick: () -> Unit = {},
-    cardColor: Color = Color.Blue
+    cardColor: Color = Color(0xff009100)
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .padding(start =8.dp, top = 8.dp, end = 8.dp, bottom = 30.dp)
+            .padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 30.dp)
             .fillMaxWidth()
             .clickable { onClick() }, colors = CardDefaults.cardColors(containerColor = cardColor)
     ) {
@@ -87,9 +52,17 @@ fun YearCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Text(
+                text = "UID: ${student.id}",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+            )
+            Spacer(modifier = Modifier.height(5.dp))
             // Course Name as heading
             Text(
-                text = year,
+                text = "Name: ${student.name}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(bottom = 8.dp),
@@ -100,4 +73,3 @@ fun YearCard(
         }
     }
 }
-

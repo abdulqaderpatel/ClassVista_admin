@@ -153,10 +153,6 @@ fun Navigator(navController: NavHostController) {
                     courseViewModel
                 )
             }
-            composable(Screen.StudentsInCourse.route)
-            {
-                StudentsInCourse(navController = navController, userViewModel = userViewModel)
-            }
             composable("${Screen.StudentsYearCourse.route}/{courseId}")
             { navBackStackEntry ->
                 var courseId =
@@ -165,10 +161,22 @@ fun Navigator(navController: NavHostController) {
                 if (courseId != null) {
                     StudentsYearCourse(
                         navController = navController,
-                        userViewModel = userViewModel,
+                        userViewModel = userViewModel, courseViewModel = courseViewModel,
                         courseId = courseId
                     )
                 }
+            }
+
+            composable("${Screen.StudentsInCourse.route}/{courseId}")
+            { navBackStackEntry ->
+                var courseId =
+                    navBackStackEntry.arguments?.getString("courseId")?.toIntOrNull() ?: 0
+                StudentsInCourse(
+                    navController = navController,
+                    userViewModel = userViewModel,
+                    courseId = courseId,
+                    courseViewModel = courseViewModel
+                )
             }
 
             composable(Screen.AddStudent.route)

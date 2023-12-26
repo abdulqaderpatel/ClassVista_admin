@@ -2,6 +2,7 @@ package com.example.classvista_admin.Utils
 
 import com.example.classvista_admin.Data.CourseInterface
 import com.example.classvista_admin.Data.CourseYearInterface
+import com.example.classvista_admin.Data.NoticeInterface
 import com.example.classvista_admin.Data.StudentInterface
 import com.example.classvista_admin.Data.SubjectInterface
 import com.example.classvista_admin.Data.TeacherInterface
@@ -41,5 +42,9 @@ object RetrofitInstance {
             .build().create(StudentInterface::class.java)
     }
 
+    val noticeInterface: NoticeInterface by lazy {
+        Retrofit.Builder().baseUrl(Util.BASE).addConverterFactory(GsonConverterFactory.create())
+            .build().create(NoticeInterface::class.java)
+    }
 
 }

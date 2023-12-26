@@ -112,7 +112,7 @@ fun Home(navController: NavController = rememberNavController()) {
                 secondary = Color(0xffee2a7b),
                 icon = Icons.Filled.Message,
                 label = "Notice",
-                route = Screen.AddedCourses.route
+                route = Screen.NoticeList.route
             ),
             AdminCard(
                 primary = Color(0xffEF484E),

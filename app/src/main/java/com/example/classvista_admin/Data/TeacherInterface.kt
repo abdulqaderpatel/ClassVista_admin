@@ -8,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface TeacherInterface {
 
@@ -23,6 +24,19 @@ interface TeacherInterface {
         var id: String,
         var name: String,
         var password: String
+    )
+
+    data class SubjectsAssigned(
+        var data: List<Boolean>
+    )
+
+    data class SubjectsTeacher(
+        val subjectIds: List<String>,
+        val teacherId: String
+    )
+
+    data class TeacherResponse(
+        val data: String
     )
 
     //get all the teacher ids which are later used to retreive their respective subjects
@@ -41,6 +55,19 @@ interface TeacherInterface {
     @POST("teacher/signup")
     suspend fun SignupTeacher(
         @Header(value = "Authorization") id: String,
-        @Body teacherAccount:TeacherAccount
-    ):Response<Data>
+        @Body teacherAccount: TeacherAccount
+    ): Response<Data>
+
+    @POST("teacher/subjectsEnrolled")
+    suspend fun assignMultipleSubjectsToTeacher(
+        @Header("Authorization") id: String,
+        @Body subjectsTeacher: SubjectsTeacher
+    ): Response<TeacherResponse>
+    @GET("teacher/subjectsEnrolled/{teacherId}")
+    suspend fun checkIfSubjectsEnrolledByTeacher(
+        @Header(value="Authorization") id: String,
+        @Path("teacherId") teacherId: String="BSCIT345"
+    ): Response<SubjectsAssigned>
+
+
 }

@@ -33,7 +33,7 @@ fun TeacherList(
 
     LaunchedEffect(Unit) {
         if (!teacherViewModel.isTeacherDataLoaded.value) {
-            teacherViewModel.isTeacherDataLoaded.value=true
+            teacherViewModel.isTeacherDataLoaded.value = true
             teacherViewModel.teacherIds.addAll(
                 RetrofitInstance.teacherInterface.getAllTeacherIds("Bearer ${userViewModel.userId.value.token}")
                     .body()!!.data
@@ -66,7 +66,9 @@ fun TeacherList(
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 itemsIndexed(teacherViewModel.teacherSubjects)
                 { index, teacher ->
-                    TeacherEnrolledInSubjects(teacherSubjects = teacher)
+                    TeacherEnrolledInSubjects(
+                        teacherSubjects = teacher,
+                        onClick = { navController.navigate("${Screen.EnrollTeacherInSubjects.route}/${teacher.id}") })
                 }
 
             }

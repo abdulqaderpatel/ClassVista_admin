@@ -72,27 +72,17 @@ fun SubjectsList(
             courseViewModel.courses.addAll(
                 RetrofitInstance.courseInterface.GetAllCourses("Bearer $token").body()!!.data
             )
-
-
         }
         courseViewModel.courses.map {
-
             courses.add(it.id)
-
-
         }
 
+        courseViewModel.subjectCourses.clear()
         courseViewModel.subjectCourses.addAll(
             RetrofitInstance.courseyearInterface.getCourseSubjects(
                 SubjectCourses(courses)
             ).body()!!.data
         )
-
-
-
-
-        Log.d("coursing time", courseViewModel.subjectCourses[0][0].id.toString())
-
         isDataLoading = false
 
     }

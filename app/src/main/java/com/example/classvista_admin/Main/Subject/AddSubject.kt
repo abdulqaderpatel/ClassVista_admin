@@ -52,6 +52,7 @@ import com.example.classvista_admin.Components.Main.AdminButton
 import com.example.classvista_admin.Components.Main.AdminTextField
 import com.example.classvista_admin.Data.CourseCreation
 import com.example.classvista_admin.Data.CourseCreationWithYears
+import com.example.classvista_admin.Data.SubjectCourses
 import com.example.classvista_admin.Data.SubjectInterface
 import com.example.classvista_admin.Utils.RetrofitInstance
 import com.example.classvista_admin.ViewModels.CourseViewModel
@@ -90,6 +91,10 @@ fun AddSubject(
     var dataLoading by remember {
         mutableStateOf(true)
     }
+
+    var courseIds =
+        mutableListOf<Int>()
+
 
 
 
@@ -139,7 +144,7 @@ fun AddSubject(
                     yearIndex
                 )
                 Log.d("Course year", courseYear.body().toString())
-                if(courseYear.isSuccessful) {
+                if (courseYear.isSuccessful) {
                     var response = RetrofitInstance.subjectInterface.CreateSubject(
                         "Bearer ${userViewModel.userId.value.token}",
                         SubjectInterface.Subject(
@@ -148,7 +153,21 @@ fun AddSubject(
                             title
                         )
                     )
+
+                    courseViewModel.courses.map {
+                        courseIds.add(it.id)
+                    }
+
+
+                    courseViewModel.subjectCourses.clear()
+                    courseViewModel.subjectCourses.addAll(
+                        RetrofitInstance.courseyearInterface.getCourseSubjects(
+                            SubjectCourses(courseIds)
+                        ).body()!!.data
+                    )
                 }
+
+
 
 
 
@@ -284,8 +303,7 @@ fun AddSubject(
                     }
                 }
             }
-        }
-        else{
+        } else {
             Box(modifier = Modifier.fillMaxSize())
             {
                 CircularProgressIndicator()

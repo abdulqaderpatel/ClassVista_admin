@@ -31,6 +31,7 @@ import com.example.classvista_admin.Main.Student.StudentsYearCourse
 import com.example.classvista_admin.Main.Subject.AddSubject
 import com.example.classvista_admin.Main.Subject.SubjectsList
 import com.example.classvista_admin.Main.Teacher.AddTeacher
+import com.example.classvista_admin.Main.Teacher.EnrollTeacherInSubjects
 import com.example.classvista_admin.Main.Teacher.TeacherList
 import com.example.classvista_admin.ViewModels.CourseViewModel
 import com.example.classvista_admin.ViewModels.TeacherViewModel
@@ -136,6 +137,20 @@ fun Navigator(navController: NavHostController) {
                     userViewModel = userViewModel,
                     teacherViewModel = teacherViewModel
                 )
+            }
+            composable("${Screen.EnrollTeacherInSubjects.route}/{teacherId}")
+            { navBackStackEntry ->
+                var teacherId =
+                    navBackStackEntry.arguments?.getString("teacherId")
+
+                if (teacherId != null) {
+                    EnrollTeacherInSubjects(
+                        navController = navController,
+                        userViewModel = userViewModel,
+                        teacherViewModel = teacherViewModel,
+                        teacherId = teacherId
+                    )
+                }
             }
             composable(Screen.AddTeacher.route)
             {

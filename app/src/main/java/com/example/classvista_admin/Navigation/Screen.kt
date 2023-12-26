@@ -17,13 +17,15 @@ sealed class Screen(val route: String) {
 
     data object TeacherList : Screen("teacher_list")
 
+    data object EnrollTeacherInSubjects : Screen("enroll_teacher_in_subjects")
+
     data object AddTeacher : Screen("add_teacher")
 
     data object StudentCourseList : Screen("student_course_list")
 
     data object StudentsInCourse : Screen("students_in_course")
 
-    data object StudentsYearCourse:Screen("students_year_course")
+    data object StudentsYearCourse : Screen("students_year_course")
 
     data object AddStudent : Screen("add_student")
 

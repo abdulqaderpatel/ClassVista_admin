@@ -33,12 +33,15 @@ fun TeacherList(
 
     LaunchedEffect(Unit) {
         if (!teacherViewModel.isTeacherDataLoaded.value) {
+
             teacherViewModel.isTeacherDataLoaded.value = true
+            teacherViewModel.teacherIds.clear()
+
             teacherViewModel.teacherIds.addAll(
                 RetrofitInstance.teacherInterface.getAllTeacherIds("Bearer ${userViewModel.userId.value.token}")
                     .body()!!.data
             )
-
+            teacherViewModel.teacherSubjects.clear()
             teacherViewModel.teacherSubjects.addAll(
                 RetrofitInstance.teacherInterface.getAllTeacherSubjects(
                     "Bearer ${userViewModel.userId.value.token}",

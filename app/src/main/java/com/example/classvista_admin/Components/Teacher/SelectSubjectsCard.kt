@@ -21,15 +21,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.classvista_admin.Models.Course.Course
 import com.example.classvista_admin.Models.CourseYear.Data
+import com.example.classvista_admin.Models.Subject.Subject
 
 @Preview(showBackground = true)
 @Composable
 fun SelectSubjectsCard(
-    isSelected: Boolean=false,onCheckedChange:(Boolean)->Unit={},
-    index: Int = 0, subjectCourse: List<Data> = listOf(
-        Data(subject_name = "web programming", id = "SBIT404"),
-        Data(subject_name = "web programming", id = "SBIT404"),
-    ), course: Course = Course(name = "Bachelors in Information Technology", short_form = "BSCIT")
+    isSelected: Boolean = false,
+    onCheckedChange: (Boolean) -> Unit = {},
+    index: Int = 0,
+    subject: Subject = Subject(
+        id = "BSCIT302",
+        subject_name = "Web Programming",
+        course_id = 34,
+        teacher_id = "3"
+    )
 ) {
     Card(
         modifier = Modifier
@@ -43,36 +48,26 @@ fun SelectSubjectsCard(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Course Name as heading
-            Text(
-                text = "${course.name} (${course.short_form})",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(checked = isSelected, onCheckedChange = onCheckedChange)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            // Subjects listed underneath each course
-            subjectCourse.map {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(checked = isSelected, onCheckedChange =onCheckedChange )
 
                     Text(
-                        text = it.id,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(bottom = 4.dp, end = 4.dp)
+                        text = "${subject.id}",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
-
                     Text(
-                        fontWeight = FontWeight.SemiBold,
-                        text = it.subject_name,
-                        fontSize = 16.sp,
-                        color = Color.Blue,
-                        modifier = Modifier.padding(bottom = 4.dp)
+                        text = "${subject.subject_name}",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
             }

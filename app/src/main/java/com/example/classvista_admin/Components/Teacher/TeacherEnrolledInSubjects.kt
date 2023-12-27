@@ -50,13 +50,14 @@ fun TeacherEnrolledInSubjects(
     ) {
         Column(
             modifier = Modifier
-                .padding(start=16.dp, end = 16.dp, bottom = 16.dp, top = 5.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 5.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.width(18.dp))
                 Text(

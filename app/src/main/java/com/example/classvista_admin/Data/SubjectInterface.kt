@@ -1,8 +1,10 @@
 package com.example.classvista_admin.Data
 
+import com.example.classvista_admin.Models.Subject.SubjectList
 import com.example.classvista_admin.Models.Subject.SubjectResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import javax.security.auth.Subject
@@ -19,8 +21,10 @@ interface SubjectInterface {
     suspend fun CreateSubject(
         @Header(value = "Authorization") id: String,
         @Body subject: Subject
-    ):Response<SubjectResponse>
+    ): Response<SubjectResponse>
 
+    @GET("subject/notassigned")
+    suspend fun getSubjectsUnassignedToTeachers(@Header("Authorization") id: String): Response<SubjectList>
 
 
 }

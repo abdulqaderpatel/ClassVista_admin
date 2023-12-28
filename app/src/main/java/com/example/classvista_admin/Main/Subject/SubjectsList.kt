@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Newspaper
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Subject
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -41,6 +45,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.classvista_admin.Components.Main.NavigatingFloatingActionButton
+import com.example.classvista_admin.Components.Main.PrimaryAppBar
+import com.example.classvista_admin.Components.Student.CourseCard
 import com.example.classvista_admin.Components.Subject.CourseSubjectDetails
 import com.example.classvista_admin.Data.CourseYearInterface
 import com.example.classvista_admin.Data.SubjectCourses
@@ -61,69 +68,41 @@ fun SubjectsList(
     var courses = mutableListOf<Int>()
 
 
-    var isDataLoading by remember {
-        mutableStateOf(true)
+    var isLoading by remember {
+        mutableStateOf(false)
     }
     LaunchedEffect(Unit) {
-
+        isLoading = true;
         if (!courseViewModel.coursesLoaded.value) {
             courseViewModel.coursesLoaded.value = true
             var token = userViewModel.userId.value.token
             courseViewModel.courses.addAll(
                 RetrofitInstance.courseInterface.GetAllCourses("Bearer $token").body()!!.data
             )
-        }
-        courseViewModel.courses.map {
-            courses.add(it.id)
-        }
 
-        courseViewModel.subjectCourses.clear()
-        courseViewModel.subjectCourses.addAll(
-            RetrofitInstance.courseyearInterface.getCourseSubjects(
-                SubjectCourses(courses)
-            ).body()!!.data
-        )
-        isDataLoading = false
-
+        }
+        isLoading = false
     }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {
-                Text(
-                    text = "Subjects",
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
-                )
-            }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Blue)
-        )
-    }, floatingActionButton = {
-        FloatingActionButton(onClick = { navController.navigate(Screen.AddSubject.route) }) {
-            Icon(imageVector = Icons.Default.Subject, contentDescription = "add subject")
-        }
-    }) {
-        if (!isDataLoading)
-            Box(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize()
-            ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    itemsIndexed(courseViewModel.subjectCourses) { index, course ->
-                        CourseSubjectDetails(
-                            index = 0,
-                            subjectCourse = course,
-                            course = courseViewModel.courses[index]
-                        )
+    if (!isLoading)
+        Scaffold(topBar = { PrimaryAppBar(title = "Subject Courses") }, floatingActionButton = {
+            NavigatingFloatingActionButton(
+                navController = navController,
+                route = Screen.AddSubject.route,
+                icon = Icons.Filled.Subject,
+                description = "Add Student"
+            )
+        }) {
+            Box(modifier = Modifier.padding(it))
+            {
+                LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+                    items(courseViewModel.courses)
+                    { course ->
+                        CourseCard(
+                            course = Course(short_form = course.short_form, id = course.id),
+                            onClick = { navController.navigate("${Screen.SubjectByCourseYears.route}/${course.id}") })
                     }
                 }
-
             }
-
-
-    }
+        }
 }

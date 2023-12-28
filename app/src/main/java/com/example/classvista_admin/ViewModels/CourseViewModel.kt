@@ -33,6 +33,10 @@ class CourseViewModel : ViewModel() {
     var subjectCourses = mutableStateListOf<List<Data>>()
 
 
+//stores the subjects by course year for a course
+    val courseyearsSubjectData = mutableListOf<List<Data>>()
+
+
 
 
 

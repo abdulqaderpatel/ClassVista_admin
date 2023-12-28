@@ -26,6 +26,12 @@ interface CourseInterface {
     @GET("course/courseyears/{courseId}")
     suspend fun GetCourseyearsFromCourse(@Path("courseId") courseId: Int): Response<CourseyearsFromCourse>
 
+    @GET("course/courseyear/ids/{courseId}")
+    suspend fun GetCourseYearIdsForCourse(
+        @Header("Authorization") id: String,
+        @Path("courseId") courseId: Int
+    ): Response<CourseYearIds>
+
 }
 
 
@@ -40,4 +46,8 @@ data class CourseCreationResponse(
 
 data class CourseyearsFromCourse(
     val data: List<CourseYear>
+)
+
+data class CourseYearIds(
+    val data: List<Int>
 )

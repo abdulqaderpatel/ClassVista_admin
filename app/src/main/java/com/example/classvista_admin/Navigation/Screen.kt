@@ -13,6 +13,8 @@ sealed class Screen(val route: String) {
 
     data object SubjectList : Screen("subject_list")
 
+    data object SubjectByCourseYears : Screen("subject_by_course_years")
+
     data object AddSubject : Screen("add_subject")
 
     data object TeacherList : Screen("teacher_list")

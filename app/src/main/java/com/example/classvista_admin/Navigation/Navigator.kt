@@ -29,6 +29,7 @@ import com.example.classvista_admin.Main.Student.StudentsCourseList
 import com.example.classvista_admin.Main.Student.StudentsInCourse
 import com.example.classvista_admin.Main.Student.StudentsYearCourse
 import com.example.classvista_admin.Main.Subject.AddSubject
+import com.example.classvista_admin.Main.Subject.SubjectByCourseYears
 import com.example.classvista_admin.Main.Subject.SubjectsList
 import com.example.classvista_admin.Main.Teacher.AddTeacher
 import com.example.classvista_admin.Main.Teacher.EnrollTeacherInSubjects
@@ -122,6 +123,18 @@ fun Navigator(navController: NavHostController) {
                     courseViewModel = courseViewModel
                 )
             }
+
+            composable("${Screen.SubjectByCourseYears.route}/{courseId}")
+            { navBackStackEntry ->
+                var courseId =
+                    navBackStackEntry.arguments?.getString("courseId")?.toIntOrNull() ?: 0
+
+                if (courseId != null) {
+                    SubjectByCourseYears(navController, userViewModel, courseViewModel,courseId)
+                }
+            }
+
+
             composable(Screen.AddSubject.route)
             {
                 AddSubject(
